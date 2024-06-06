@@ -1,7 +1,6 @@
 package macro;
 
 // award for the most useless macro ever goes to sscript
-
 import haxe.macro.Compiler;
 import haxe.macro.ComplexTypeTools;
 import haxe.macro.Context;
@@ -10,7 +9,6 @@ import haxe.macro.MacroStringTools;
 import haxe.macro.Printer;
 import haxe.macro.TypeTools;
 import haxe.macro.TypedExprTools;
-import tea.backend.SScriptVer;
 import tea.backend.crypto.Base32;
 import haxe.Serializer;
 import haxe.Unserializer;
@@ -23,7 +21,6 @@ import sys.io.Process;
 using StringTools;
 
 typedef SuperlativeSettings = {
-	public var showMacro:Bool;
 	public var includeAll:Bool;
 	public var loopCost:Int;
 }
@@ -31,23 +28,18 @@ typedef SuperlativeSettings = {
 @:access(hscriptBase.Tools)
 class Macro {
 	public static final defaultSettings:SuperlativeSettings = {
-		showMacro: false,
 		includeAll: false,
 		loopCost: 25
 	}
 
-	#if !macro
+	#if (!macro && !DISABLED_MACRO_SUPERLATIVE)
 	public static final allClassesAvailable:Map<String, Class<Dynamic>> = hscriptBase.Tools.names.copy();
 	#end
-
-	public static var VERSION(default, null):SScriptVer = new SScriptVer(7, 7, 0);
 
 	#if sys
 	public static var isWindows(default, null):Bool = ~/^win/i.match(Sys.systemName());
 	public static var definePath(get, never):String;
 	#end
-
-	static var credits:Array<String> = ["Special Thanks:", "- CrowPlexus\n",];
 
 	public static var macroClasses:Array<Class<Dynamic>> = [
 		Compiler,
