@@ -9,6 +9,7 @@ import hscriptBase.Expr;
 import sys.FileSystem;
 import sys.io.File;
 #end
+import openfl.utils.Assets;
 import tea.backend.*;
 import tea.backend.crypto.Base32;
 
@@ -692,6 +693,7 @@ class SScript {
 		setClass(FileSystem);
 		setClass(Sys);
 		#end
+		setClass(Assets);
 
 		#if (SUPERLATIVE_INCLUDE_ALL && !DISABLED_MACRO_SUPERLATIVE)
 		for (i => k in macro.Macro.allClassesAvailable)
@@ -729,14 +731,16 @@ class SScript {
 			if (FileSystem.exists(scriptPath)) {
 				scriptFile = scriptPath;
 				script = File.getContent(scriptPath);
-			} else {
+			else #end if (Assets.exists(scriptPath))
+			{
+				scriptFile = scriptPath;
+				script = Assets.getText(scriptPath);
+			}
+			else
+			{
 				scriptFile = "";
 				script = scriptPath;
 			}
-			#else
-			scriptFile = "";
-			script = scriptPath;
-			#end
 
 			if (scriptFile != null && scriptFile.length > 0)
 				global[scriptFile] = this;
@@ -774,8 +778,11 @@ class SScript {
 				scriptFile = string;
 				origin = string;
 				string = File.getContent(string);
+			} else #end if (Assets.exists(string)) {
+				scriptFile = string;
+				origin = string;
+				string = Assets.getText(string);
 			}
-			#end
 
 			var og:String = origin;
 			if (og != null && og.length > 0)
@@ -879,8 +886,23 @@ class SScript {
 				if (hasExtension && FileSystem.exists(path + i))
 					list.push(new SScript(path + i));
 			}
+		} else #end if (Assets.exists(path)) {
+			var files:Array<String> = Assets.list().filter(folder -> folder.contains(path)).map(folder -> folder.substr(folder.lastIndexOf("/") + 1);
+			for (i in files)
+			{
+				var hasExtension:Bool = false;
+				for (l in extensions)
+				{
+					if (i.endsWith(l))
+					{
+						hasExtension = true;
+						break;
+					}
+				}
+				if (hasExtension && Assets.exists(path + i))
+					list.push(new SScript(path + i));
+			}
 		}
-		#end
 
 		return list;
 	}
