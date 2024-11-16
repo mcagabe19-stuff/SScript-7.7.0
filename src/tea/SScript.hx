@@ -731,6 +731,7 @@ class SScript {
 			if (FileSystem.exists(scriptPath)) {
 				scriptFile = scriptPath;
 				script = File.getContent(scriptPath);
+			}
 			else #end if (Assets.exists(scriptPath))
 			{
 				scriptFile = scriptPath;
