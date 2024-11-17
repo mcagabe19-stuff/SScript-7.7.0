@@ -731,6 +731,7 @@ class SScript {
 			if (FileSystem.exists(scriptPath)) {
 				scriptFile = scriptPath;
 				script = File.getContent(scriptPath);
+			}
 			else #end if (Assets.exists(scriptPath))
 			{
 				scriptFile = scriptPath;
@@ -887,7 +888,7 @@ class SScript {
 					list.push(new SScript(path + i));
 			}
 		} else #end if (Assets.exists(path)) {
-			var files:Array<String> = Assets.list().filter(folder -> folder.contains(path)).map(folder -> folder.substr(folder.lastIndexOf("/") + 1);
+			var files:Array<String> = Assets.list().filter(folder -> folder.contains(path)).map(folder -> folder.substr(folder.lastIndexOf("/") + 1));
 			for (i in files)
 			{
 				var hasExtension:Bool = false;
